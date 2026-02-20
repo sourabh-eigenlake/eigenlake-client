@@ -21,7 +21,7 @@
       
       
       <link rel="icon" href="assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.2">
     
     
       
@@ -566,22 +566,22 @@
 </code></pre></div>
 <h2 id="quick-connect">Quick Connect</h2>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">eigenlake</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">eigenlake.classes.init</span><span class="w"> </span><span class="kn">import</span> <span class="n">Auth</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">eigenlake</span><span class="w"> </span><span class="kn">import</span> <span class="n">schema</span> <span class="k">as</span> <span class="n">s</span>
 
 <span class="n">api_key</span> <span class="o">=</span> <span class="s2">&quot;&lt;sk_sbx_your_api_key_here&gt;&quot;</span>
-<span class="n">client</span> <span class="o">=</span> <span class="n">eigenlake</span><span class="o">.</span><span class="n">connect_to_eigenlake_cloud</span><span class="p">(</span>
-    <span class="n">cluster_url</span><span class="o">=</span><span class="s2">&quot;https://api.eigenlake.dev/&quot;</span><span class="p">,</span>
-    <span class="n">auth_credentials</span><span class="o">=</span><span class="n">Auth</span><span class="o">.</span><span class="n">api_key</span><span class="p">(</span><span class="n">api_key</span><span class="p">),</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">eigenlake</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+    <span class="n">url</span><span class="o">=</span><span class="s2">&quot;https://api.eigenlake.dev/&quot;</span><span class="p">,</span>
+    <span class="n">api_key</span><span class="o">=</span><span class="n">api_key</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="n">client</span><span class="o">.</span><span class="n">is_ready</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">client</span><span class="o">.</span><span class="n">ready</span><span class="p">())</span>
 <span class="n">client</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </code></pre></div>
 <h2 id="what-you-get">What You Get</h2>
 <ul>
 <li>Connect to cloud or local EigenLake deployments</li>
-<li>Manage collections</li>
-<li>Insert and query vectors</li>
+<li>Manage indexes by namespace</li>
+<li>Insert and search vectors</li>
 <li>Batch write helper for high-throughput inserts</li>
 </ul>
 
