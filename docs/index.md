@@ -12,22 +12,21 @@ pip install eigenlake
 
 ```python
 import eigenlake
-from eigenlake.classes.init import Auth
+from eigenlake import schema as s
 
 api_key = "<sk_sbx_your_api_key_here>"
-client = eigenlake.connect_to_eigenlake_cloud(
-    cluster_url="https://api.eigenlake.dev/",
-    auth_credentials=Auth.api_key(api_key),
+client = eigenlake.connect(
+    url="https://api.eigenlake.dev/",
+    api_key=api_key,
 )
 
-print(client.is_ready())
+print(client.ready())
 client.close()
 ```
 
 ## What You Get
 
 - Connect to cloud or local EigenLake deployments
-- Manage collections
-- Insert and query vectors
+- Manage indexes by namespace
+- Insert and search vectors
 - Batch write helper for high-throughput inserts
-

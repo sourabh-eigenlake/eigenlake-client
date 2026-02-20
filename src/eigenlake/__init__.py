@@ -1,43 +1,43 @@
 from __future__ import annotations
 
-from .classes.init import Auth
-from .client import Client
+from .client import EigenLakeClient
+from . import schema
 
 
-def connect_to_eigenlake_cloud(
+def connect(
     *,
-    cluster_url: str,
-    auth_credentials=None,
+    url: str,
+    api_key: str | None = None,
     timeout: float = 20.0,
     retries: int = 2,
-) -> Client:
-    return Client(
-        cluster_url=cluster_url,
-        auth_credentials=auth_credentials,
+) -> EigenLakeClient:
+    return EigenLakeClient(
+        url=url,
+        api_key=api_key,
         timeout=timeout,
         retries=retries,
     )
 
 
-def connect_to_local(
+def connect_local(
     *,
     host: str = "http://localhost",
     port: int = 8000,
-    auth_credentials=None,
+    api_key: str | None = None,
     timeout: float = 20.0,
     retries: int = 2,
-) -> Client:
-    return Client(
-        cluster_url=f"{host.rstrip('/')}:{int(port)}",
-        auth_credentials=auth_credentials,
+) -> EigenLakeClient:
+    return EigenLakeClient(
+        url=f"{host.rstrip('/')}:{int(port)}",
+        api_key=api_key,
         timeout=timeout,
         retries=retries,
     )
 
 
 __all__ = [
-    "Auth",
-    "Client",
-    "connect_to_eigenlake_cloud",
-    "connect_to_local",
+    "EigenLakeClient",
+    "connect",
+    "connect_local",
+    "schema",
 ]

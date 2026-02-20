@@ -4,52 +4,54 @@
 
 ```python
 import eigenlake
-from eigenlake.classes.init import Auth
+from eigenlake import schema as s
 
 api_key = "<sk_sbx_your_api_key_here>"
-client = eigenlake.connect_to_eigenlake_cloud(
-    cluster_url="https://api.eigenlake.dev/",
-    auth_credentials=Auth.api_key(api_key),
+client = eigenlake.connect(
+    url="https://api.eigenlake.dev/",
+    api_key=api_key,
 )
 ```
 
-## Create a Collection
+## Create an Index
 
 ```python
-schema = {
-    "type": "object",
-    "additionalProperties": True,
-    "properties": {
-        "document_id": {"type": "string"},
-        "text": {"type": "string"},
-    },
-}
+schema, index_options = (
+    s.SchemaBuilder(additional_properties=False)
+    .add("document_id", s.string(required=True, filterable=True))
+    .add("document_title", s.string(filterable=True))
+    .add("chunk_number", s.integer(filterable=True))
+    .add("document_url", s.string(format="uri", filterable=True))
+    .add("created_at", s.datetime(filterable=True))
+    .add("tags", s.array(s.string(), filterable=False, max_items=20))
+    .build()
+)
 
-collection = client.collections.get_or_create(
-    bucket_name="demo-bucket",
-    name="demo-index",
-    dims=128,
-    schema_json=schema,
-    sharded=True,
+index = client.indexes.create_or_get(
+    namespace="demo-namespace",
+    index="demo-index",
+    dimensions=128,
+    schema=schema,
+    index_options=index_options,
 )
 ```
 
 ## Insert a Vector
 
 ```python
-uid = collection.data.insert(
+record_id = index.records.add(
     properties={"document_id": "doc-1", "text": "hello"},
     vector=[0.1] * 128,
 )
-print("inserted:", uid)
+print("inserted:", record_id)
 ```
 
 ## Query by Vector
 
 ```python
-result = collection.query.near_vector(
+result = index.search.nearest(
     vector=[0.1] * 128,
-    top_k=5,
+    limit=5,
 )
 print(result)
 ```
@@ -59,4 +61,3 @@ print(result)
 ```python
 client.close()
 ```
-

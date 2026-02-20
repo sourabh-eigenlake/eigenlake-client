@@ -1,6 +1,6 @@
 # eigenlake
 
-Python SDK for Eigenlake Cloud.
+Python SDK for EigenLake Cloud.
 
 ## Install
 
@@ -13,18 +13,34 @@ pip install eigenlake
 ```python
 import os
 import eigenlake
-from eigenlake.classes.init import Auth
+from eigenlake import schema as s
 
 # Best practice: store your credentials in environment variables
-cluster_url = os.environ["EIGENLAKE_URL"]
+url = os.environ["EIGENLAKE_URL"]
 api_key = os.environ["EIGENLAKE_API_KEY"]
 
-client = eigenlake.connect_to_eigenlake_cloud(
-    cluster_url=cluster_url,
-    auth_credentials=Auth.api_key(api_key),
+client = eigenlake.connect(
+    url=url,
+    api_key=api_key,
 )
 
-print(client.is_ready())  # True
+print(client.ready())  # True
+
+schema, index_options = (
+    s.SchemaBuilder(additional_properties=False)
+    .add("document_id", s.string(required=True, filterable=True))
+    .add("document_title", s.string(filterable=True))
+    .add("chunk_number", s.integer(filterable=True))
+    .build()
+)
+
+index = client.indexes.create_or_get(
+    namespace="demo-namespace",
+    index="demo-index",
+    dimensions=128,
+    schema=schema,
+    index_options=index_options,
+)
 
 client.close()
 ```

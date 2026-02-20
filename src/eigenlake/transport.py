@@ -5,7 +5,6 @@ from typing import Any
 
 import httpx
 
-from .classes.init import ApiKeyAuth
 from .errors import APIError, AuthenticationError, ConflictError, NetworkError, NotFoundError, ValidationError
 
 
@@ -14,7 +13,7 @@ class Transport:
         self,
         *,
         base_url: str,
-        auth_credentials: ApiKeyAuth | None,
+        api_key: str | None,
         timeout: float = 20.0,
         retries: int = 2,
     ):
@@ -23,16 +22,15 @@ class Transport:
         self._client = httpx.Client(
             base_url=normalized,
             timeout=float(timeout),
-            headers=self._auth_headers(auth_credentials),
+            headers=self._auth_headers(api_key),
         )
 
     @staticmethod
-    def _auth_headers(auth_credentials: ApiKeyAuth | None) -> dict[str, str]:
-        if auth_credentials is None:
+    def _auth_headers(api_key: str | None) -> dict[str, str]:
+        token = (api_key or "").strip()
+        if not token:
             return {}
-        if isinstance(auth_credentials, ApiKeyAuth):
-            return {"X-API-Key": auth_credentials.key}
-        raise TypeError("Unsupported auth credentials")
+        return {"X-API-Key": token}
 
     @staticmethod
     def _detail(resp: httpx.Response) -> str:

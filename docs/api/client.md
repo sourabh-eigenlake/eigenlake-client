@@ -4,11 +4,14 @@
 
 ::: eigenlake
 
-## Client and Collection Namespaces
+## Client and Index Namespaces
 
 ::: eigenlake.client
 
-## Auth Helpers
+## Errors
 
-::: eigenlake.classes.init
+::: eigenlake.errors
 
+## Schema Builder
+
+::: eigenlake.schema
